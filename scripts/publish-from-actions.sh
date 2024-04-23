@@ -24,7 +24,7 @@
 # SOFTWARE.
 
 
-set -e
+set -euo pipefail
 
 BUILD_DIR=dist
 SOURCE_DIRECTORY_DEPLOY_GH=~/temp-gh-deploy-src
@@ -43,7 +43,7 @@ echo "#############################################"
 echo "######### Setting env vars" 
 echo "#############################################" 
 
-REMOTE_REPO="https://${GITHUB_PERSONAL_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+REMOTE_REPO="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 REPONAME="$(echo $GITHUB_REPOSITORY| cut -d'/' -f 2)"
 
 OWNER="$(echo $GITHUB_REPOSITORY| cut -d'/' -f 1)" 
@@ -82,8 +82,8 @@ echo "#############################################"
 echo "######### Commit and push ###" 
 echo "#############################################" 
 sleep 1s
-git config user.name "${GITHUB_ACTOR}"
-git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+git config --global user.name "${GITHUB_ACTOR}"
+git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 echo `date` >> forcebuild.date
 git add -A 
 git commit -m 'Deploy to GitHub Pages' 
