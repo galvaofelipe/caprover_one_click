@@ -20,11 +20,15 @@ jobs:
 
             - name: Install dependencies
               run: npm ci
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Validate and format code
               run: npm run validate_apps && npm run formatter
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build and publish project
+            - name: Publish project to GitHub Pages
               run: npm run publish
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

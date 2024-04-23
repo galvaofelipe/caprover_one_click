@@ -17,5 +17,9 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
             - run: npm run validate_apps
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - run: npm run formatter
+            env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
