@@ -24,10 +24,11 @@ jobs:
         run: npm ci
       - name: Build project
         run: npm run build
-      - name: Upload artifact
+      - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./dist
+          name: github-pages
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         with:
