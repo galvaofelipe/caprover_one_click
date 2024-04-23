@@ -1,65 +1,58 @@
 name: Continuous Integration and Deployment
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 jobs:
-  build-and-validate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    build-and-validate:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '21'
-          cache: 'npm'
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
+                  cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Validate Apps
-        run: npm run validate_apps
+            - name: Validate Apps
+              run: npm run validate_apps
 
-      - name: Run Formatter
-        run: npm run formatter
+            - name: Run Formatter
+              run: npm run formatter
 
-      - name: Archive node_modules
-        uses: actions/upload-artifact@v2
-        with:
-          name: node_modules
-          path: node_modules
+    publish:
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        needs: build-and-validate
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-  publish:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: build-and-validate
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
+                  cache: 'npm'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '21'
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Download node_modules
-        uses: actions/download-artifact@v2
-        with:
-          name: node_modules
-          path: .
+            - name: Publish project to GitHub Pages
+              run: npm run publish
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_PERSONAL_TOKEN: ${{ secrets.GH_PERSONAL_TOKEN }}
 
-      - name: Publish project to GitHub Pages
-        run: npm run publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Error Handling
-        if: failure()
-        run: echo "Deployment failed. Please check logs."
+            - name: Error Handling
+              if: failure()
+              run: echo "Deployment failed. Please check logs."
