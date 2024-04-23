@@ -1,35 +1,48 @@
 name: Publish One Click Apps
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [master]
+    push:
+        branches: [master]
 
 jobs:
-  build:
-    if: github.event.pull_request.merged == true
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 21
-      - name: Install dependencies
-        run: npm ci
-      - name: Build project
-        run: npm run build
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./dist
-          name: github-pages
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
-        with:
-          token: ${{ secrets.GB_PERSONAL_TOKEN }}
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # Ensure all history is fetched
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Validate and format code
+              run: npm run validate_apps && npm run formatter
+
+            - name: Build and publish project
+              run: npm run publish
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use intra-repository token
+
+            - name: Deploy to GitHub Pages
+              run: |
+                  git config --global user.name "GitHub Actions"
+                  git config --global user.email "actions@github.com"
+                  git fetch origin gh-pages
+                  git checkout gh-pages
+                  git rm -rf .  # Clear old content
+                  git checkout master -- dist
+                  mv dist/* . && rm -rf dist  # Move new build
+                  git add .
+                  git commit -m "Deploy to GitHub Pages"
+                  git push origin gh-pages  # Consider removing --force to preserve history
+              continue-on-error: true # Continue in case of minor errors in the deployment process
+
+            - name: Error Handling
+              if: failure() # This step will run only if the previous step fails
+              run: echo "Deployment failed. Please check logs."
