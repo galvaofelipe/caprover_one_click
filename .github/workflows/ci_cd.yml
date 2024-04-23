@@ -19,12 +19,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '21'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate and format code
-        run: npm run validate_apps && npm run formatter
+      - name: Validate Apps
+        run: npm run validate_apps
+
+      - name: Run Formatter
+        run: npm run formatter
+
+      - name: Archive node_modules
+        uses: actions/upload-artifact@v2
+        with:
+          name: node_modules
+          path: node_modules
 
   publish:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -39,8 +49,11 @@ jobs:
         with:
           node-version: '21'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Download node_modules
+        uses: actions/download-artifact@v2
+        with:
+          name: node_modules
+          path: .
 
       - name: Publish project to GitHub Pages
         run: npm run publish
