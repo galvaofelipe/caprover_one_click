@@ -63,28 +63,39 @@ services:
         caproverExtra:
             dockerfileLines:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
-                - >-
-                    RUN mkdir -p /data && echo '#!/bin/bash\n\nif [ ! -f /data/config.yaml
-                    ]; then\n  echo "general_settings:" >> /data/config.yaml\n  [ -n
-                    "$LITELLM_MASTER_KEY" ] && echo "  master_key: $LITELLM_MASTER_KEY" >>
-                    /data/config.yaml\n  echo "  proxy_batch_write_at: 60" >>
-                    /data/config.yaml\n  echo "  disable_spend_logs: true" >>
-                    /data/config.yaml\n  echo "  disable_reset_budget: true" >>
-                    /data/config.yaml\n  echo "  database_connection_pool_limit: 100" >>
-                    /data/config.yaml\n  echo "  database_connection_timeout: 60" >>
-                    /data/config.yaml\n  [ -n "$DATABASE_URL" ] && echo "  database_url:
-                    $DATABASE_URL" >> /data/config.yaml\n  echo "  database_type:
-                    postgres" >> /data/config.yaml\n  echo "  background_health_checks:
-                    true" >> /data/config.yaml\n  echo "  health_check_interval: 300" >>
-                    /data/config.yaml\n  echo "router_settings:" >> /data/config.yaml\n 
-                    echo "  routing_strategy: usage-based-routing-v2" >>
-                    /data/config.yaml\n  [ -n "$REDIS_HOST" ] && echo "  redis_host:
-                    $REDIS_HOST" >> /data/config.yaml\n  [ -n "$REDIS_PORT" ] && echo " 
-                    redis_port: $REDIS_PORT" >> /data/config.yaml\n  [ -n
-                    "$REDIS_PASSWORD" ] && echo "  redis_password: $REDIS_PASSWORD" >>
-                    /data/config.yaml\n  echo "  num_retries: 3" >> /data/config.yaml\n 
-                    echo "  timeout: 60" >> /data/config.yaml\nfi\n\nexec litellm "$@"' >
-                    /entrypoint.sh && chmod +x /entrypoint.sh
+                - 'RUN mkdir -p /data'
+                - |-
+                    RUN cat <<'EOF' > /entrypoint.sh
+                    #!/bin/bash
+
+                    # Check if config file exists, create if not
+                    CONFIG_FILE="/data/config.yaml"
+                    if [ ! -f "$CONFIG_FILE" ]; then
+                      echo "Creating configuration file at $CONFIG_FILE"
+                      echo "general_settings:" > $CONFIG_FILE
+                      echo "  master_key: \${LITELLM_MASTER_KEY}" >> $CONFIG_FILE
+                      echo "  proxy_batch_write_at: 60" >> $CONFIG_FILE
+                      echo "  disable_spend_logs: true" >> $CONFIG_FILE
+                      echo "  disable_reset_budget: true" >> $CONFIG_FILE
+                      echo "  database_connection_pool_limit: 100" >> $CONFIG_FILE
+                      echo "  database_connection_timeout: 60" >> $CONFIG_FILE
+                      echo "  database_url: \${DATABASE_URL}" >> $CONFIG_FILE
+                      echo "  database_type: postgres" >> $CONFIG_FILE
+                      echo "  background_health_checks: true" >> $CONFIG_FILE
+                      echo "  health_check_interval: 300" >> $CONFIG_FILE
+                      echo "router_settings:" >> $CONFIG_FILE
+                      echo "  routing_strategy: usage-based-routing-v2" >> $CONFIG_FILE
+                      echo "  redis_host: \${REDIS_HOST}" >> $CONFIG_FILE
+                      echo "  redis_port: \${REDIS_PORT}" >> $CONFIG_FILE
+                      echo "  redis_password: \${REDIS_PASSWORD}" >> $CONFIG_FILE
+                      echo "  num_retries: 3" >> $CONFIG_FILE
+                      echo "  timeout: 60" >> $CONFIG_FILE
+                    fi
+
+                    # Start the main application
+                    exec litellm "$@"
+                    EOF
+                - 'RUN chmod +x /entrypoint.sh'
                 - 'ENTRYPOINT ["/entrypoint.sh"]'
                 - 'CMD ["--config", "/data/config.yaml", "--port", "4000"]'
             containerHttpPort: 4000
@@ -111,10 +122,6 @@ services:
             notExposeAsWebApp: true
 caproverOneClickApp:
     variables:
-        - id: $$cap_appname
-          label: App Name
-          defaultValue: litellm
-          description: The name of the LiteLLM app.
         - id: $$cap_postgres_version
           label: PostgreSQL Version
           defaultValue: '15.6'
@@ -131,11 +138,11 @@ caproverOneClickApp:
               https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
         - id: $$cap_db_password
           label: Database Password
-          defaultValue: $$cap_gen_random_hex(16)
+          defaultValue: $$cap_gen_random_hex(20)
           description: The password for the PostgreSQL database user.
         - id: $$cap_redis_password
           label: Redis Password
-          defaultValue: $$cap_gen_random_hex(16)
+          defaultValue: $$cap_gen_random_hex(20)
           description: The password for the Redis instance.
         - id: $$cap_master_key
           label: LiteLLM Master Key
@@ -154,18 +161,15 @@ caproverOneClickApp:
           description: The organization ID for OpenAI.
         - id: $$cap_openai_api_base
           label: OpenAI API Base URL
-          defaultValue: 'https://api.openai.com/v1'
           description: The base URL for the OpenAI API.
         - id: $$cap_azure_api_key
           label: Azure API Key
           description: The API key for Azure Cognitive Services.
         - id: $$cap_azure_api_base
           label: Azure API Base URL
-          defaultValue: 'https://westus.api.cognitive.microsoft.com'
           description: The base URL for Azure Cognitive Services API.
         - id: $$cap_azure_api_version
           label: Azure API Version
-          defaultValue: '2023-05-15'
           description: The version of the Azure Cognitive Services API.
         - id: $$cap_azure_ad_token
           label: Azure AD Token
@@ -181,7 +185,6 @@ caproverOneClickApp:
           description: The API key for Azure Mistral service.
         - id: $$cap_azure_mistral_api_base
           label: Azure Mistral API Base URL
-          defaultValue: 'https://mistral.azure-api.net'
           description: The base URL for Azure Mistral API.
         - id: $$cap_vertexai_project
           label: Vertex AI Project
@@ -224,7 +227,6 @@ caproverOneClickApp:
           description: The API key for Hugging Face service.
         - id: $$cap_huggingface_api_base
           label: Hugging Face API Base URL
-          defaultValue: 'https://api-inference.huggingface.co/models'
           description: The base URL for Hugging Face API.
         - id: $$cap_perplexityai_api_key
           label: Perplexity AI API Key
@@ -240,7 +242,6 @@ caproverOneClickApp:
           description: The API key for Xinference service.
         - id: $$cap_xinference_api_base
           label: Xinference API Base URL
-          defaultValue: 'https://api.xinference.com'
           description: The base URL for Xinference API.
         - id: $$cap_cloudflare_api_key
           label: Cloudflare API Key
