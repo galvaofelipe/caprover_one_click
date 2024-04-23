@@ -1,6 +1,8 @@
 name: Publish One Click Apps
 
 on:
+    pull_request:
+        branches: [master]
     push:
         branches: [master]
 
@@ -26,7 +28,7 @@ jobs:
             - name: Validate and format code
               run: npm run validate_apps && npm run formatter
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish project to GitHub Pages
               run: npm run publish
