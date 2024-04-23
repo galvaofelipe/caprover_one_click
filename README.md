@@ -1,37 +1,5 @@
-## Repo for CapRover One Click Apps
+## Felipe Galvão's CapRover One Click Apps Repository
 
-### How to create a one-click app (as of v1.8.0):
-First, have a look at [this simple example](https://github.com/caprover/one-click-apps/blob/master/public/v4/apps/privatebin.yml). Now, read on for more details:
-
-
-- Find/create a docker-compose file for the app you're interested in.
-- Add `captainVersion: 4` to the very top of the yaml file.
-- Add this section to the end of the yaml file:
-```yaml
-caproverOneClickApp:
-    variables:
-        - id: '$$cap_myapp_version'
-          label: Awesome App Version
-          defaultValue: '1.2.3'
-          description: Check out their Docker page for the valid tags https://hub.docker.com/r/....../tags
-          validRegex: '/.{1,}/'
-    instructions:
-        start: |-
-            A description that will be displayed to the user when they
-            are installing one click app!
-            It can be multiline and contain more details and probably special
-            hardware requirements!
-        end: |-
-            A summary when the app is deployed!
-            It can be multiline.
-
-            It can also include the dynamic parameters such as
-            $$cap_appname and $$cap_other_random_char
-    displayName: The Awesome App
-    isOfficial: true ## Only if all images used here are official or from a trusted source.
-    description: A relatively short description, less than 200 characters.
-    documentation: This docker-compose is taken from example.com
-```
 
 ### Variables:
 - Variables are prefixed with `$$cap`
@@ -49,12 +17,11 @@ caproverOneClickApp:
     - `notExposeAsWebApp` can be set to `"true"` when the underlying service is not an HTTP app. This is useful for databases and other internally used services.
     - `websocketSupport` can be set to `"true"` to automatically enable Websocket Support. Only supported in versions 1.12+
 
+
 ### Icon
 - Make sure you add an app icon to the logos directory!
 
-
 ---------
-
 
 ## Test your One Click Apps
 After creating your One-Click app yaml file, you need to test it before creating a Pull Request. Here is how you test it:
@@ -66,12 +33,7 @@ After creating your One-Click app yaml file, you need to test it before creating
 
 ---------
 
-## Build your own one-click app repository
-You may want to build your own private repository. CapRover supports having multiple repositories. You can add new repository URLs to the one click app page. The official one, this one, is available as `https://oneclickapps.caprover.com`.
-
-To create your own repository:
-- Fork this repository
-- Delete all existing apps (to avoid duplicate apps), and add your own apps.
+## Validate your One Click Apps
 - Run `npm i`
 - Run `npm run validate_apps`
 - Run `npm run formatter-write`
@@ -86,6 +48,3 @@ In order to add a third party repository:
 -   Under **3rd party repositories:** copy  the URL, (for example: `https://Awes0meHub.github.io/caprover-one-click-apps`) and paste it in to the text box
 -   Click the **_Connect New Repository_** button
 
-#### 3rd party repositories
--   Awes0meHub: [Github](https://github.com/caproverhub/caprover-one-click-apps) repository: `https://caproverhub.github.io/caprover-one-click-apps`
--   Jordan-hall: [Github](https://github.com/Jordan-Hall/caprover-one-click-apps) repository: `https://oneclickapps.libertyware.io`
