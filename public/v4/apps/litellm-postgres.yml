@@ -92,7 +92,7 @@ services:
                     fi
 
                     # Start the main application
-                    exec "litellm -config /data/config.yaml -port 4000"
+                    /bin/bash litellm -config /data/config.yaml -port 4000
                     EOF
                 - 'RUN sed -i "s/\r$//" /entrypoint.sh'
                 - 'RUN chmod +x /entrypoint.sh'
@@ -325,7 +325,7 @@ caproverOneClickApp:
             - Redis Host: srv-captain--$$cap_appname-redis
             - Redis Port: 6379
             - Redis Password: $$cap_redis_password
-    displayName: LiteLLM
+    displayName: LiteLLM (with Postgres) - LLM Proxy Server
     isOfficial: false
     description: >-
         LiteLLM is a lightweight, scalable, and secure API proxy server for

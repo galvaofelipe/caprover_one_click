@@ -45,7 +45,7 @@ services:
                 - 'RUN mkdir -p /root/.flowise /root/.flowise/logs /root/.flowise/storage /root/.flowise/api_key /root/.flowise/secret_key'
                 - 'RUN chmod -R 777 /root/.flowise'
                 - 'RUN chown -R 777 node:node /root/.flowise'
-                - 'EXEC sleep 3 && flowise start'
+                - 'EXEC sleep 3 && flowise'
         depends_on:
             - $$cap_appname-db
     $$cap_appname-db:
@@ -200,7 +200,7 @@ caproverOneClickApp:
             - Database Password: $$cap_db_password
             - Database Host: srv-captain--$$cap_appname-db
             - Database Port: 5432
-    displayName: Flowise AI - LLM Orchestration Tool
+    displayName: Flowise AI (with Postgres) - LLM Orchestration Tool
     isOfficial: true
     description: >-
         Flowise is an open-source low-code platform for building, deploying, and sharing customized LLM orchestration flows and AI agents, empowering developers to create AI solutions quickly and easily.
