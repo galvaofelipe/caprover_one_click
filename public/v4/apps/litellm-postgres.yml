@@ -1,7 +1,7 @@
 captainVersion: 4
 services:
     $$cap_appname:
-        restart: unless-stopped
+        restart: on-failure:5
         environment:
             DATABASE_URL: >-
                 postgres://litellm:$$cap_db_password@srv-captain--$$cap_appname-db:5432/litellm
@@ -293,8 +293,8 @@ caproverOneClickApp:
             - Redis Port: 6379
             - Redis Password: $$cap_redis_password
     displayName: LiteLLM (with Postgres) - LLM Proxy Server
-    isOfficial: false
+    isOfficial: true
     description: >-
-        [24/04/26 9h35] LiteLLM is a lightweight, scalable, and secure API proxy server for OpenAI, Huggingface, Azure, and other AI providers.
+        [24/04/26 11h45] LiteLLM is a lightweight, scalable, and secure API proxy server for OpenAI, Huggingface, Azure, and other AI providers.
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/

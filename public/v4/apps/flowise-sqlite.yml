@@ -2,7 +2,7 @@ captainVersion: 4
 services:
     $$cap_appname:
         image: flowiseai/flowise
-        restart: unless-stopped
+        restart: on-failure:5
         environment:
             PORT: 3000
             CORS_ORIGINS: $$cap_cors_origins
@@ -124,4 +124,4 @@ caproverOneClickApp:
         Taken from https://docs.flowiseai.com | Official Website is https://flowiseai.com
     displayName: Flowise AI (SQLite) - LLM Orchestration Tool
     description: >-
-        [24/04/26 9h35] Flowise is an open-source low-code platform for building, deploying, and sharing LLM flows and AI agents. This is the SQLite version.
+        [24/04/26 11h45] Flowise is an open-source low-code platform for building, deploying, and sharing LLM flows and AI agents. This is the SQLite version.
