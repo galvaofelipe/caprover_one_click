@@ -4,7 +4,7 @@ services:
         restart: unless-stopped
         environment:
             DATABASE_URL: >-
-                postgres://litellm:$$cap_db_password@srv-captain--$$cap_appname-db:5432/litellm_db
+                postgres://litellm:$$cap_db_password@srv-captain--$$cap_appname-db:5432/litellm
             REDIS_PASSWORD: $$cap_redis_password
             REDIS_HOST: srv-captain--$$cap_appname-redis
             REDIS_PORT: 6379
@@ -103,16 +103,16 @@ services:
         image: 'postgres:$$cap_postgres_version'
         restart: unless-stopped
         environment:
-            POSTGRES_DB: litellm_db
+            POSTGRES_DB: litellm
             POSTGRES_PASSWORD: $$cap_db_password
             POSTGRES_USER: litellm
-            POSTGRES_INITDB_ARGS: "--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
+            POSTGRES_INITDB_ARGS: "--encoding='UTF8' --lc-collate='C' --lc-ctype='C' --locale=en_US.UTF-8 --data-checksums --max_connections=100"
         volumes:
             - '$$cap_appname-db-data:/var/lib/postgresql/data'
         caproverExtra:
             notExposeAsWebApp: true
     $$cap_appname-redis:
-        restart: always
+        restart: unless-stopped
         image: 'bitnami/redis:$$cap_redis_version'
         environment:
             REDIS_PASSWORD: $$cap_redis_password
@@ -318,7 +318,7 @@ caproverOneClickApp:
             ### Postgres Database Details:
             - Postgres Host: srv-captain--$$cap_appname-db
             - Postgres Port: 5432
-            - Postgres Database Name: litellm_db
+            - Postgres Database Name: litellm
             - Postgres Database User: litellm
             - Postgres Password: $$cap_db_password
 
@@ -329,8 +329,6 @@ caproverOneClickApp:
     displayName: LiteLLM (with Postgres) - LLM Proxy Server
     isOfficial: false
     description: >-
-        [24/04/26 6h21] LiteLLM is a lightweight, scalable, and secure API proxy server for
-        OpenAI, Huggingface, Azure, and other AI providers.
+        [24/04/26 6h44] LiteLLM is a lightweight, scalable, and secure API proxy server for OpenAI, Huggingface, Azure, and other AI providers.
     documentation: >-
-        Taken from https://docs.litellm.ai/docs/ Official Website is
-        https://litellm.ai/
+        Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
