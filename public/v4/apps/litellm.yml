@@ -148,6 +148,7 @@ caproverOneClickApp:
           description: The master key for LiteLLM.
         - id: $$cap_ui_username
           label: UI Username
+          defaultValue: litellm
           description: The username for accessing the LiteLLM web interface.
         - id: $$cap_ui_password
           label: UI Password
