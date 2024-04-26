@@ -131,7 +131,7 @@ services:
                       alerting: []
                       alert_types: []
                       database_url: "os.environ/DATABASE_URL"
-                    EOF
+                    EOF \
                     )
                 - 'CMD ["--port", "4000", "--config", "/data/config.yaml"]'
             containerHttpPort: 4000
@@ -197,4 +197,4 @@ caproverOneClickApp:
             See https://docs.litellm.ai/docs/ for more information.
     documentation: https://docs.litellm.ai/docs/
     description: |-
-        [2024/04/26 - 17h45] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
+        [2024/04/26 - 17h55] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
