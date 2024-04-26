@@ -108,7 +108,7 @@ services:
             POSTGRES_USER: litellm
             POSTGRES_INITDB_ARGS: "--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
         volumes:
-            - '$$cap_appname-db:/var/lib/postgresql/data'
+            - '$$cap_appname-db-data:/var/lib/postgresql/data'
         caproverExtra:
             notExposeAsWebApp: true
     $$cap_appname-redis:
@@ -117,7 +117,7 @@ services:
         environment:
             REDIS_PASSWORD: $$cap_redis_password
         volumes:
-            - '$$cap_appname-redis-persistance:/bitnami'
+            - '$$cap_appname-redis-data:/bitnami'
         caproverExtra:
             notExposeAsWebApp: true
 caproverOneClickApp:

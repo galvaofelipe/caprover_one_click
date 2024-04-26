@@ -39,7 +39,7 @@ services:
             LANGCHAIN_API_KEY: $$cap_langchain_api_key
             LANGCHAIN_PROJECT: $$cap_langchain_project
         volumes:
-            - $$cap_appname-db:/root/.flowise
+            - $$cap_appname-data:/root/.flowise
         caproverExtra:
             containerHttpPort: 3000
         depends_on:
@@ -53,7 +53,7 @@ services:
             POSTGRES_USER: flowise
             POSTGRES_INITDB_ARGS: "--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
         volumes:
-            - '$$cap_appname-db:/var/lib/postgresql/data'
+            - '$$cap_appname-db-data:/var/lib/postgresql/data'
         caproverExtra:
             notExposeAsWebApp: true
 caproverOneClickApp:
