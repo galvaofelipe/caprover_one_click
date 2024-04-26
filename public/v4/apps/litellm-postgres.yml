@@ -64,7 +64,7 @@ services:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
                 - 'RUN mkdir -p /data'
                 - |-
-                    RUN cat <<'EOF' > /entrypoint.sh
+                    RUN cat <<'EOF' | sed 's/\r$//' > /entrypoint.sh
                     #!/bin/bash
 
                     # Check if config file exists, create if not
@@ -92,10 +92,11 @@ services:
                     fi
 
                     # Start the main application
-                    litellm "-config /data/config.yaml -port 4000"
+                    exec litellm "-config /data/config.yaml -port 4000"
                     EOF
-                - 'RUN sed -i "s/\r$//" /entrypoint.sh'
-                - 'RUN chmod +x /entrypoint.sh'
+                - 'RUN chmod 777 /entrypoint.sh'
+                - 'RUN cat /entrypoint.sh'
+                - 'RUN which litellm' # Ensure litellm is in the PATH
                 - 'ENTRYPOINT ["/entrypoint.sh"]'
             containerHttpPort: 4000
     $$cap_appname-db:
@@ -328,7 +329,7 @@ caproverOneClickApp:
     displayName: LiteLLM (with Postgres) - LLM Proxy Server
     isOfficial: false
     description: >-
-        LiteLLM is a lightweight, scalable, and secure API proxy server for
+        [24/04/26 5h35] LiteLLM is a lightweight, scalable, and secure API proxy server for
         OpenAI, Huggingface, Azure, and other AI providers.
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is
