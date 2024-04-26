@@ -22,7 +22,7 @@ services:
             dockerfileLines:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
                 - 'RUN mkdir -p /data && chmod -R +wr /data'
-                - |
+                - |-
                     RUN test -f /data/config.yaml || \
                       (cat <<EOF > /data/config.yaml
                     model_list:
@@ -139,7 +139,8 @@ caproverOneClickApp:
     variables:
         - id: $$cap_database_url
           label: Database URL
-          description: Optional. Required for UI access. (postgres or dynamodb)
+          description: >-
+              Optional. Required for UI access. Postgres or DynamoDB Connection String.
         - id: $$cap_ui_username
           label: UI Username
           defaultValue: litellm
@@ -149,11 +150,13 @@ caproverOneClickApp:
           description: Password for UI access. Only used if database URL is provided.
         - id: $$cap_litellm_log_level
           label: Log Level
-          description: LiteLLM log level. (INFO, DEBUG, NONE)
+          description: |-
+              LiteLLM log level. (enum: INFO, DEBUG, NONE)
           defaultValue: INFO
         - id: $$cap_litellm_debug
           label: Debug Mode
-          description: Enable debug mode. (true, false)
+          description: |-
+              Enable debug mode. (enum: true, false)
           defaultValue: false
         # Integrations
         - id: $$cap_openai_api_key
@@ -193,4 +196,5 @@ caproverOneClickApp:
 
             See https://docs.litellm.ai/docs/ for more information.
     documentation: https://docs.litellm.ai/docs/
-    description: [2024/04/26 - 17h45] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
+    description: |-
+        [2024/04/26 - 17h45] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
