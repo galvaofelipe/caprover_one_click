@@ -131,6 +131,8 @@ services:
                       timeout: 60
                       max_retries: 3
                     EOF
+                - 'RUN ls -la /data'
+                - 'RUN cat /data/config.yaml'
                 - 'CMD ["--port", "4000", "--config", "/data/config.yaml"]'
             containerHttpPort: 4000
 caproverOneClickApp:
