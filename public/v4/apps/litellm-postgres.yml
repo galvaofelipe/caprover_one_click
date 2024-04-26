@@ -92,7 +92,7 @@ services:
                     fi
 
                     # Start the main application
-                    /bin/bash litellm -config /data/config.yaml -port 4000
+                    litellm "-config /data/config.yaml -port 4000"
                     EOF
                 - 'RUN sed -i "s/\r$//" /entrypoint.sh'
                 - 'RUN chmod +x /entrypoint.sh'
