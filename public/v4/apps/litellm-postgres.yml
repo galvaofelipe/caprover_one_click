@@ -92,7 +92,7 @@ services:
                     fi
 
                     # Start the main application
-                    exec "litellm -config /data/config.yaml -port 4000"
+                    exec litellm -config /data/config.yaml -port 4000
                     EOF
                 - 'RUN chmod 777 /entrypoint.sh'
                 - 'RUN cat /entrypoint.sh'
