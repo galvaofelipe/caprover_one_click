@@ -3,28 +3,18 @@ services:
     $$cap_appname:
         restart: on-failure:5
         environment:
-            LITELLM_MASTER_KEY: $$cap_master_key
-            REDIS_HOST: $$cap_redis_host
-            REDIS_PORT: $$cap_redis_port
-            REDIS_PASSWORD: $$cap_redis_password
             DATABASE_URL: $$cap_database_url
             UI_USERNAME: $$cap_ui_username
             UI_PASSWORD: $$cap_ui_password
             LITELLM_LOG: $$cap_litellm_log_level
-            NO_DOCS: $$cap_litellm_no_docs
-            SLACK_WEBHOOK_URL: $$cap_slack_webhook_url
+            DEBUG: $$cap_litellm_debug
             OPENAI_API_KEY: $$cap_openai_api_key
             OPENAI_ORGANIZATION: $$cap_openai_organization
             ANTHROPIC_API_KEY: $$cap_anthropic_api_key
             MISTRAL_API_KEY: $$cap_mistral_api_key
             GEMINI_API_KEY: $$cap_gemini_api_key
-            GOOGLE_APPLICATION_CREDENTIALS: $$cap_google_application_credentials
-            HUGGINGFACE_API_KEY: $$cap_huggingface_api_key
-            HUGGINGFACE_API_BASE: $$cap_huggingface_api_base
             GROQ_API_KEY: $$cap_groq_api_key
             COHERE_API_KEY: $$cap_cohere_api_key
-            PERPLEXITYAI_API_KEY: $$cap_perplexityai_api_key
-
         volumes:
             - '$$cap_appname-data:/data'
         # image: ghcr.io/berriai/litellm:main-latest - use the dockerfileLines instead
@@ -34,116 +24,173 @@ services:
                 - 'RUN mkdir -p /data && chmod -R +wr /data'
                 - |
                     RUN test -f /data/config.yaml || \
-                        echo -e "model_list:\n - model_name: gpt-3.5-turbo ### RECEIVED MODEL NAME ###\n   litellm_params:\n     model: \"gpt-3.5-turbo\"\n     api_key: \$\$OPENAI_API_KEY\n   model_info:\n     mode: completion\nlitellm_settings:\n   set_verbose: True\nrouter_settings:\n   routing_strategy: usage-based-routing-v2\ngeneral_settings:\n   alerting: []" > /data/config.yaml && \
-                        { [ -n "$DATABASE_URL" ] && yq -i '.general_settings.database_url = os.environ.DATABASE_URL' /data/config.yaml || true; } && \
-                        { [ -n "$REDIS_HOST" ] && yq -i '.router_settings.redis_host = os.environ.REDIS_HOST' /data/config.yaml || true; } && \
-                        { [ -n "$REDIS_PORT" ] && yq -i '.router_settings.redis_port = os.environ.REDIS_PORT' /data/config.yaml || true; } && \
-                        { [ -n "$REDIS_PASSWORD" ] && yq -i '.router_settings.redis_password = os.environ.REDIS_PASSWORD' /data/config.yaml || true; }
+                      (cat <<EOF > /data/config.yaml
+                    model_list:
+                      - model_name: gpt-3.5-turbo
+                        litellm_params:
+                          model: "gpt-3.5-turbo"
+                          api_key: "os.environ/OPENAI_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: gpt-4-turbo
+                        litellm_params:
+                          model: "gpt-4-turbo"
+                          api_key: "os.environ/OPENAI_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: whisper
+                          litellm_params:
+                              model: whisper-1
+                              api_key: os.environ/OPENAI_API_KEY
+                          model_info:
+                              mode: audio_transcription
+                      - model_name: dall-e-3
+                          litellm_params:
+                              model: dall-e-3
+                              api_key: os.environ/OPENAI_API_KEY
+                          model_info:
+                              mode: image_generation
+                      - model_name: text-embedding-3
+                          litellm_params:
+                              model: text-embedding-3-small
+                              api_key: os.environ/OPENAI_API_KEY
+                          model_info:
+                              mode: embedding
+                      - model_name: claude-3-opus
+                        litellm_params:
+                          model: "claude-3-opus-20240229"
+                          api_key: "os.environ/ANTHROPIC_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: claude-3-sonnet
+                        litellm_params:
+                          model: "claude-3-sonnet-20240229"
+                          api_key: "os.environ/ANTHROPIC_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: claude-3-haiku
+                        litellm_params:
+                          model: "claude-3-haiku-20240307"
+                          api_key: "os.environ/ANTHROPIC_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: mistral-large
+                        litellm_params:
+                          model: "mistral-large-latest"
+                          api_key: "os.environ/MISTRAL_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: mistral-medium
+                        litellm_params:
+                          model: "mistral-medium-latest"
+                          api_key: "os.environ/MISTRAL_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: llama3-8b
+                        litellm_params:
+                          model: "llama3-8b-8192"
+                          api_key: "os.environ/GROQ_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: llama3-70b
+                        litellm_params:
+                          model: "llama3-70b-8192"
+                          api_key: "os.environ/GROQ_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: mixtral-8x7b
+                        litellm_params:
+                          model: "mixtral-8x7b-32768"
+                          api_key: "os.environ/GROQ_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: command-r
+                        litellm_params:
+                          model: "command-r"
+                          api_key: "os.environ/COHERE_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: command-r-plus
+                        litellm_params:
+                          model: "command-r-plus"
+                          api_key: "os.environ/COHERE_API_KEY"
+                        model_info:
+                          mode: chat
+                      - model_name: gemini-1.5-pro
+                        litellm_params:
+                          model: "gemini-1.5-pro-latest"
+                          api_key: "os.environ/GEMINI_API_KEY"
+                        model_info:
+                          mode: chat
+                    litellm_settings:
+                      set_verbose: True
+                    router_settings:
+                      timeout: 60  # seconds
+                      max_retries: 3
+                    general_settings:
+                      alerting: []
+                      alert_types: []
+                      database_url: "os.environ/DATABASE_URL"
+                    EOF
+                    )
                 - 'CMD ["--port", "4000", "--config", "/data/config.yaml"]'
             containerHttpPort: 4000
 caproverOneClickApp:
     variables:
-        - id: $$cap_redis_host
-          label: Redis Host
-          description: The Redis host for LiteLLM. Optional. Only use this if you want to use Redis.
-        - id: $$cap_redis_port
-          label: Redis Port
-          description: The Redis port for LiteLLM. Optional. Only use this if you want to use Redis.
-        - id: $$cap_redis_password
-          label: Redis Password
-          description: The Redis password for LiteLLM. Optional. Only use this if you want to use Redis.
         - id: $$cap_database_url
           label: Database URL
-          description: The database URL for LiteLLM. Optional. Only use this if you want to use a database. (postgres or dynamodb)
+          description: Optional. Required for UI access. (postgres or dynamodb)
         - id: $$cap_ui_username
           label: UI Username
           defaultValue: litellm
-          description: The username for accessing the LiteLLM web interface.
+          description: Username for UI access. Only used if database URL is provided.
         - id: $$cap_ui_password
           label: UI Password
-          description: The password for accessing the LiteLLM web interface.
-        - id: $$cap_master_key
-          label: LiteLLM Master Key
-          description: >-
-              The master key for LiteLLM. Optional. Only use this if you to require all calls to contain this key. (e.g. Authorization: Bearer sk-1234)
+          description: Password for UI access. Only used if database URL is provided.
         - id: $$cap_litellm_log_level
-          label: LiteLLM Log Level
-          description: >-
-              The log level for LiteLLM. (enum: INFO, DEBUG, NONE)
+          label: Log Level
+          description: LiteLLM log level. (INFO, DEBUG, NONE)
           defaultValue: INFO
-        - id: $$cap_litellm_no_docs
-          label: LiteLLM No Docs
-          description: >-
-              Disable the Swagger documentation for LiteLLM. (enum: true, false)
+        - id: $$cap_litellm_debug
+          label: Debug Mode
+          description: Enable debug mode. (true, false)
           defaultValue: false
-        - id: $$cap_slack_webhook_url
-          label: Slack Webhook URL
-          description: The webhook URL for Slack. Get from https://api.slack.com/messaging/webhooks
-          # Integrations
+        # Integrations
         - id: $$cap_openai_api_key
           label: OpenAI API Key
-          description: The API key for OpenAI. Get from https://platform.openai.com/
-        - id: $$cap_openai_organization
-          label: OpenAI Organization
-          description: The organization ID for OpenAI.
+          description: Get from https://platform.openai.com/
         - id: $$cap_anthropic_api_key
           label: Anthropic API Key
-          description: The API key for Anthropic service. Get from https://console.anthropic.com/settings/keys
+          description: Get from https://console.anthropic.com/settings/keys
         - id: $$cap_mistral_api_key
           label: Mistral API Key
-          description: The API key for Mistral service. Get from https://console.mistral.ai/api-keys/
+          description: Get from https://console.mistral.ai/api-keys/
         - id: $$cap_gemini_api_key
           label: Gemini API Key
-          description: The API key for Gemini service. Get from https://console.cloud.google.com/
-        - id: $$cap_google_application_credentials
-          label: Google Application Credentials
-          description: The path to the Google application credentials JSON file. Get from https://console.cloud.google.com/
-        - id: $$cap_huggingface_api_key
-          label: Hugging Face API Key
-          description: The API key for Hugging Face service. Get from https://huggingface.co/
-        - id: $$cap_huggingface_api_base
-          label: Hugging Face API Base URL
-          description: The base URL for Hugging Face API. (e.g., https://api-inference.huggingface.co/models)
+          description: Get from https://console.cloud.google.com/apis/credentials
         - id: $$cap_groq_api_key
           label: Groq API Key
-          description: The API key for Groq service.
+          description: Get from https://groq.com/
         - id: $$cap_cohere_api_key
           label: Cohere API Key
-          description: The API key for Cohere service. Get from https://dashboard.cohere.ai/
-        - id: $$cap_perplexityai_api_key
-          label: Perplexity AI API Key
-          description: The API key for Perplexity AI service.
+          description: Get from https://dashboard.cohere.ai/
     displayName: LiteLLM (Standalone) - LLM Proxy Server
     isOfficial: true
     instructions:
         start: |-
-            LiteLLM is a lightweight, scalable, and secure API proxy server for LLMs.
+            Requirements:
+            - Username and password for UI access (if using database)
+            - API keys for desired AI providers
 
-            Before installing the LiteLLM app, please ensure you have the following:
+            Provide the required information during installation.
 
-            * API keys for the AI providers you want to use (e.g., OpenAI, Hugging Face, Azure, etc.).
-            * A master key for securing your LiteLLM instance.
-            * Credentials (username and password) for accessing the LiteLLM web interface.
-
-            During the installation process, you will be asked to provide the following information:
-
-            * LiteLLM master key for encryption.
-            * Username and password for the LiteLLM web interface.
-            * API keys and configurations for the AI providers you want to use.
-
-            Please have this information ready before proceeding with the installation.
-
-            Once you have provided the necessary information and the app is successfully deployed you can access the LiteLLM web interface and API using the URLs provided in the post-installation instructions.
-
-            If you encounter any issues during the installation or have any questions, please refer to the LiteLLM documentation: https://docs.litellm.ai/docs/
+            See https://docs.litellm.ai/docs/ for more details.
         end: |-
-            LiteLLM has been successfully deployed!
+            LiteLLM deployed successfully!
 
-            * UI not accessible: The UI requires a working database connection. This standalone version does not have a database dependency. You can still use the API endpoints directly.
+            - UI available at http://$$cap_appname.$$cap_root_domain/ui (if database URL provided)
+            - API docs available at http://$$cap_appname.$$cap_root_domain/
 
-            The API Swagger docs is available at the root:
-            http://$$cap_appname.$$cap_root_domain/
-    documentation: >-
-        Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
-    description: >-
-        [24/04/26 13h25] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
+            See https://docs.litellm.ai/docs/ for more information.
+    documentation: https://docs.litellm.ai/docs/
+    description: LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
