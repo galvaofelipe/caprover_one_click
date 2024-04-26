@@ -44,10 +44,10 @@ caproverOneClickApp:
           label: UI Password
           description: The password for accessing the LiteLLM web interface.
           defaultValue: null
-        - id $$cap_config_yaml_default_contents
+        - id: $$cap_config_yaml_default_contents
           label: Default contents for config.yaml file
           description: The default contents for the config.yaml file in case creating a new one is needed.
-          defaultValue: |-
+          defaultValue: |
               # LiteLLM Configuration
               # This file contains the configuration for LiteLLM.
               # You can modify the settings here to customize your LiteLLM instance.
@@ -55,7 +55,7 @@ caproverOneClickApp:
                 - model_name: gpt-3.5-turbo ### RECEIVED MODEL NAME ###
                   litellm_params: # all params accepted by litellm.completion() - https://docs.litellm.ai/docs/completion/input
                     model: "gpt-3.5-turbo"
-                    api_key: os.environ.OPENAI_API_KEY                   
+                    api_key: os.environ.OPENAI_API_KEY
         - id: $$cap_openai_api_key
           label: OpenAI API Key
           description: The API key for OpenAI. Get from https://platform.openai.com/
@@ -109,7 +109,7 @@ caproverOneClickApp:
 
             Please have this information ready before proceeding with the installation.
 
-            Once you have provided the necessary information and the app is successfully deployed, you can access the LiteLLM web interface and API using the URLs provided in the post-installation instructions.
+            Once you have provided the necessary information and the app is successfully deployed you can access the LiteLLM web interface and API using the URLs provided in the post-installation instructions.
 
             If you encounter any issues during the installation or have any questions, please refer to the LiteLLM documentation: https://docs.litellm.ai/docs/
         end: |-
@@ -123,4 +123,4 @@ caproverOneClickApp:
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
     description: >-
-        [24/04/26 10h] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
+        [24/04/26 10h10] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
