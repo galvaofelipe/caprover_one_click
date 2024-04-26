@@ -21,8 +21,9 @@ services:
         caproverExtra:
             dockerfileLines:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
+                - 'RUN apk add --no-cache yq'
                 - 'RUN mkdir -p /data && chmod -R +wr /data'
-                - 'RUN test - f /data/config.yaml || touch /data/config.yaml'
+                - 'RUN test -f /data/config.yaml || touch /data/config.yaml'
                 - | # Initialize Model List if null
                     RUN [ -z "$(yq eval '.model_list' /data/config.yaml)" ] && \
                       yq eval '.model_list = [ \
