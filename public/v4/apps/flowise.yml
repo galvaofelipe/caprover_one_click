@@ -97,35 +97,27 @@ caproverOneClickApp:
           label: Debug Mode
           defaultValue: false
           description: Print logs from components.
-          type: text
+          type: boolean
         - id: $$cap_sync_db_on_restart
           label: Sync Database on Restart
           defaultValue: false
           description: Set to true to re-create schema on every restart.
-          type: text
+          type: boolean
         - id: $$cap_secretkey_overwrite
           label: Encryption Key Overwrite
           defaultValue: null
           description: Encryption key to be used instead of the key stored in SECRETKEY_PATH.
           type: text
         - id: $$cap_log_level
-          label: Log Level
+          label: Log Level (error, info, verbose, debug)
           defaultValue: info
           description: Different levels of logs.
-          type: enum
-          enumValues:
-              - error
-              - info
-              - verbose
-              - debug
+          type: text
         - id: $$cap_storage_type
           label: Storage Type
           defaultValue: local
-          description: Type of storage for uploaded files. Default is local.
-          type: enum
-          enumValues:
-              - s3
-              - local
+          description: Type of storage for uploaded files. Default is local. (local, s3)
+          type: text
         - id: $$cap_s3_bucket_name
           label: S3 Bucket Name
           defaultValue: null
@@ -150,7 +142,7 @@ caproverOneClickApp:
           label: Disable Telemetry
           defaultValue: false
           description: Turn off telemetry.
-          type: text
+          type: boolean
         - id: $$cap_model_list_config_json
           label: Model List Config JSON
           defaultValue: /your_model_list_config_file_path
@@ -172,7 +164,7 @@ caproverOneClickApp:
           label: LangSmith Tracing
           defaultValue: false
           description: Turn LangSmith tracing ON or OFF.
-          type: text
+          type: boolean
         - id: $$cap_langchain_endpoint
           label: LangSmith Endpoint
           defaultValue: null
