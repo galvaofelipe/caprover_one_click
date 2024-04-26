@@ -3,7 +3,6 @@ services:
     $$cap_appname:
         restart: unless-stopped
         environment:
-            TZ: $$cap_tz
             DATABASE_URL: >-
                 postgres://litellm:$$cap_db_password@srv-captain--$$cap_appname-db:5432/litellm_db
             REDIS_PASSWORD: $$cap_redis_password
@@ -93,7 +92,7 @@ services:
                     fi
 
                     # Start the main application
-                    exec litellm "$@"
+                    exec "litellm $@"
                     EOF
                 - 'RUN chmod +x /entrypoint.sh'
                 - 'ENTRYPOINT ["/entrypoint.sh"]'
@@ -307,7 +306,7 @@ caproverOneClickApp:
             - Redis Port: 6379
             - Redis Password: $$cap_redis_password
     displayName: LiteLLM
-    isOfficial: true
+    isOfficial: false
     description: >-
         LiteLLM is a lightweight, scalable, and secure API proxy server for
         OpenAI, Huggingface, Azure, and other AI providers.
