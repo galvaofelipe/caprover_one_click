@@ -72,7 +72,8 @@ services:
             POSTGRES_DB: litellm
             POSTGRES_PASSWORD: $$cap_db_password
             POSTGRES_USER: litellm
-            POSTGRES_INITDB_ARGS: "--encoding='UTF8' --lc-collate='C' --lc-ctype='C' --locale=en_US.UTF-8 --data-checksums --max_connections=100 --timezone=$$cap_tz"
+            POSTGRES_INITDB_ARGS: "--data-checksums --encoding='UTF8' --lc-collate='C' --lc-ctype='C' --locale=en_US.UTF-8"
+            TZ: $$cap_tz
         volumes:
             - '$$cap_appname-db-data:/var/lib/postgresql/data'
         caproverExtra:

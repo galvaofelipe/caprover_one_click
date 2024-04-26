@@ -50,7 +50,8 @@ services:
             POSTGRES_DB: flowise
             POSTGRES_PASSWORD: $$cap_db_password
             POSTGRES_USER: flowise
-            POSTGRES_INITDB_ARGS: "--encoding='UTF8' --lc-collate='C' --lc-ctype='C' --timezone=$$cap_tz --max_connections=100 --locale=en_US.UTF-8 --data-checksums"
+            POSTGRES_INITDB_ARGS: "--data-checksums --encoding='UTF8' --lc-collate='C' --lc-ctype='C' --locale=en_US.UTF-8"
+            TZ: $$cap_tz
         volumes:
             - '$$cap_appname-db-data:/var/lib/postgresql/data'
         caproverExtra:
