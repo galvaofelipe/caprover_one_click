@@ -1,7 +1,7 @@
 captainVersion: 4
 services:
     $$cap_appname:
-        restart: unless-stopped
+        restart: on-failure:5
         environment:
             LITELLM_MASTER_KEY: $$cap_master_key
             UI_USERNAME: $$cap_ui_username
@@ -111,4 +111,4 @@ caproverOneClickApp:
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
     description: >-
-        [24/04/26 11h07] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
+        [24/04/26 11h45] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
