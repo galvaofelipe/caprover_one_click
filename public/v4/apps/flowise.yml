@@ -153,7 +153,7 @@ caproverOneClickApp:
           type: text
         - id: $$cap_model_list_config_json
           label: Model List Config JSON
-          defaultValue: /your_model_list_config_file_path
+          defaultValue: null
           description: File path to load list of models from your local config file.
           type: text
         - id: $$cap_tool_function_builtin_dep

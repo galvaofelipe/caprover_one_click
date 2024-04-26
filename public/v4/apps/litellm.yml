@@ -94,6 +94,7 @@ services:
                     # Start the main application
                     exec "litellm $@"
                     EOF
+                - 'RUN sed -i "s/\r$//" /entrypoint.sh'
                 - 'RUN chmod +x /entrypoint.sh'
                 - 'ENTRYPOINT ["/entrypoint.sh"]'
                 - 'CMD ["--config", "/data/config.yaml", "--port", "4000"]'
@@ -283,8 +284,27 @@ caproverOneClickApp:
           description: The app name for OpenRouter.
     instructions:
         start: >-
-            LiteLLM is being deployed! It may take a few minutes for the services to
-            start.
+            LiteLLM is a lightweight, scalable, and secure API proxy server for LLMs.
+
+            Before installing the LiteLLM app, please ensure you have the following:
+
+            1. API keys for the AI providers you want to use (e.g., OpenAI, Hugging Face, Azure, etc.).
+            2. A master key for securing your LiteLLM instance.
+            3. Credentials (username and password) for accessing the LiteLLM web interface.
+
+            During the installation process, you will be asked to provide the following information:
+
+            1. PostgreSQL and Redis versions to use.
+            2. Database and Redis passwords (generated automatically if not provided).
+            3. LiteLLM master key for encryption.
+            4. Username and password for the LiteLLM web interface.
+            5. API keys and configurations for the AI providers you want to use.
+
+            Please have this information ready before proceeding with the installation.
+
+            Once you have provided the necessary information and the app is successfully deployed, you can access the LiteLLM web interface and API using the URLs provided in the post-installation instructions.
+
+            If you encounter any issues during the installation or have any questions, please refer to the LiteLLM documentation: https://docs.litellm.ai/docs/
         end: |-
             LiteLLM has been successfully deployed!
 
