@@ -296,6 +296,6 @@ caproverOneClickApp:
     displayName: LiteLLM (with Postgres) - LLM Proxy Server
     isOfficial: true
     description: >-
-        [24/04/26 11h45] LiteLLM is a lightweight, scalable, and secure API proxy server for OpenAI, Huggingface, Azure, and other AI providers.
+        [24/04/26 13h15] LiteLLM is a lightweight, scalable, and secure API proxy server for OpenAI, Huggingface, Azure, and other AI providers.
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/

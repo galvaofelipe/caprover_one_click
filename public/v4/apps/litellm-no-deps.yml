@@ -136,4 +136,4 @@ caproverOneClickApp:
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
     description: >-
-        [24/04/26 12h35] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
+        [24/04/26 13h15] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
