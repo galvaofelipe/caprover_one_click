@@ -207,6 +207,6 @@ caproverOneClickApp:
     displayName: Flowise AI - LLM Orchestration Tool
     isOfficial: true
     description: >-
-          Flowise is an open-source low-code platform for building, deploying, and sharing customized LLM orchestration flows and AI agents, empowering developers to create AI solutions quickly and easily.
+        Flowise is an open-source low-code platform for building, deploying, and sharing customized LLM orchestration flows and AI agents, empowering developers to create AI solutions quickly and easily.
     documentation: >-
         Taken from https://docs.flowiseai.com | Official Website is https://flowiseai.com
