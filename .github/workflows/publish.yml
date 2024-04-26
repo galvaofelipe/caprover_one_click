@@ -1,0 +1,31 @@
+name: Publish Repo
+
+on:
+    push:
+        branches: [master]
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci && npm run validate_apps && npm run formatter
+
+            - name: Publish project to GitHub Pages
+              run: npm run publish
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_PERSONAL_TOKEN: ${{ secrets.GH_PERSONAL_TOKEN }}
+
+            - name: Error Handling
+              if: failure()
+              run: echo "Deployment failed. Please check logs."

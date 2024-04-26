@@ -1,0 +1,29 @@
+name: Validate Apps
+
+on:
+    pull_request:
+        branches: [master]
+
+jobs:
+    build-and-validate:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Validate Apps
+              run: npm run validate_apps
+
+            - name: Run Formatter
+              run: npm run formatter
