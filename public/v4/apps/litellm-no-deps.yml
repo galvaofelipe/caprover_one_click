@@ -23,7 +23,7 @@ services:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
                 - 'RUN mkdir -p /data && chmod -R +wr /data'
                 - |-
-                    RUN cat <<-EOF > | sed 's/^                      //' /data/config.yaml
+                    RUN cat <<-EOF > /data/config.yaml
                     model_list:
                       - model_name: gpt-3.5-turbo
                         litellm_params:
@@ -195,4 +195,4 @@ caproverOneClickApp:
             See https://docs.litellm.ai/docs/ for more information.
     documentation: https://docs.litellm.ai/docs/
     description: |-
-        [2024/04/26 - 19h10] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
+        [2024/04/26 - 19h15] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
