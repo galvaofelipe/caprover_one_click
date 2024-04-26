@@ -92,12 +92,13 @@ services:
                     fi
 
                     # Start the main application
-                    exec litellm -config /data/config.yaml -port 4000
+                    # exec litellm -config /data/config.yaml -port 4000
                     EOF
                 - 'RUN chmod 777 /entrypoint.sh'
-                - 'RUN cat /entrypoint.sh'
-                - 'RUN which litellm' # Ensure litellm is in the PATH
                 - 'ENTRYPOINT ["/entrypoint.sh"]'
+                - 'EXEC cat /entrypoint.sh'
+                - 'EXEC which litellm' # Ensure litellm is in the PATH
+                - 'CMD ["litellm", "-config", "/data/config.yaml", "-port", "4000"]'
             containerHttpPort: 4000
     $$cap_appname-db:
         image: 'postgres:$$cap_postgres_version'
