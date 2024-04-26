@@ -94,10 +94,8 @@ services:
                     # Start the main application
                     # exec litellm -config /data/config.yaml -port 4000
                     EOF
-                - 'RUN chmod 777 /entrypoint.sh'
+                - 'RUN chmod +x /entrypoint.sh'
                 - 'ENTRYPOINT ["/entrypoint.sh"]'
-                - 'EXEC cat /entrypoint.sh'
-                - 'EXEC which litellm' # Ensure litellm is in the PATH
                 - 'CMD ["litellm", "-config", "/data/config.yaml", "-port", "4000"]'
             containerHttpPort: 4000
     $$cap_appname-db:
@@ -330,6 +328,6 @@ caproverOneClickApp:
     displayName: LiteLLM (with Postgres) - LLM Proxy Server
     isOfficial: false
     description: >-
-        [24/04/26 6h44] LiteLLM is a lightweight, scalable, and secure API proxy server for OpenAI, Huggingface, Azure, and other AI providers.
+        [24/04/26 7h20] LiteLLM is a lightweight, scalable, and secure API proxy server for OpenAI, Huggingface, Azure, and other AI providers.
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
