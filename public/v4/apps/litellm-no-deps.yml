@@ -17,7 +17,6 @@ services:
             HUGGINGFACE_API_BASE: $$cap_huggingface_api_base
             PERPLEXITYAI_API_KEY: $$cap_perplexityai_api_key
             GROQ_API_KEY: $$cap_groq_api_key
-            $INITIAL_CONFIG_YAML: $$cap_config_yaml_default_contents
         volumes:
             - '$$cap_appname-data:/data'
         # image: ghcr.io/berriai/litellm:main-latest - use the dockerfileLines instead
@@ -25,7 +24,7 @@ services:
             dockerfileLines:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
                 - 'RUN chmod 777 /data'
-                - 'RUN test -f /data/config.yaml || echo "$INITIAL_CONFIG_YAML" > /data/config.yaml'
+                - 'RUN test -f /data/config.yaml || echo -e "model_list:\n  - model_name: gpt-3.5-turbo ### RECEIVED MODEL NAME ###\n    litellm_params: # all params accepted by litellm.completion() - https://docs.litellm.ai/docs/completion/input\n      model: \"gpt-3.5-turbo\"\n      api_key: \$\$OPENAI_API_KEY" > /data/config.yaml'
                 - 'CMD ["litellm", "--port", "4000", "--config", "/data/config.yaml"]'
             containerHttpPort: 4000
 caproverOneClickApp:
@@ -44,18 +43,6 @@ caproverOneClickApp:
           label: UI Password
           description: The password for accessing the LiteLLM web interface.
           defaultValue: null
-        - id: $$cap_config_yaml_default_contents
-          label: Default contents for config.yaml file
-          description: The default contents for the config.yaml file in case creating a new one is needed.
-          defaultValue: |
-              # LiteLLM Configuration
-              # This file contains the configuration for LiteLLM.
-              # You can modify the settings here to customize your LiteLLM instance.
-              model_list:
-                - model_name: gpt-3.5-turbo ### RECEIVED MODEL NAME ###
-                  litellm_params: # all params accepted by litellm.completion() - https://docs.litellm.ai/docs/completion/input
-                    model: "gpt-3.5-turbo"
-                    api_key: os.environ.OPENAI_API_KEY
         - id: $$cap_openai_api_key
           label: OpenAI API Key
           description: The API key for OpenAI. Get from https://platform.openai.com/
@@ -123,4 +110,4 @@ caproverOneClickApp:
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
     description: >-
-        [24/04/26 10h10] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
+        [24/04/26 10h15] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
