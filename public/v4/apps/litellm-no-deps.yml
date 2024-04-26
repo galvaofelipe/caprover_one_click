@@ -21,7 +21,6 @@ services:
         caproverExtra:
             dockerfileLines:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
-                - 'RUN apk add --no-cache yq'
                 - 'RUN mkdir -p /data && chmod -R +wr /data'
                 - |-
                     RUN cat <<EOF > /data/config.yaml
