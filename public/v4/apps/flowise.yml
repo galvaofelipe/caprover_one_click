@@ -1,8 +1,6 @@
 captainVersion: 4
 services:
     $$cap_appname:
-        image: flowiseai/flowise
-        command: /bin/sh -c "sleep 3; flowise start"
         restart: unless-stopped
         environment:
             PORT: 3000
@@ -42,6 +40,12 @@ services:
             - $$cap_appname-db:/root/.flowise
         caproverExtra:
             containerHttpPort: 3000
+            dockerfileLines: |
+                - 'FROM flowiseai/flowise'
+                - 'RUN mkdir -p /root/.flowise /root/.flowise/logs /root/.flowise/storage /root/.flowise/api_key /root/.flowise/secret_key'
+                - 'RUN chmod -R 777 /root/.flowise'
+                - 'RUN chown -R 777 node:node /root/.flowise'
+                - 'EXEC sleep 3 && flowise start'
         depends_on:
             - $$cap_appname-db
     $$cap_appname-db:

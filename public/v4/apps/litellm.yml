@@ -92,12 +92,11 @@ services:
                     fi
 
                     # Start the main application
-                    exec "litellm $@"
+                    exec "litellm -config /data/config.yaml -port 4000"
                     EOF
                 - 'RUN sed -i "s/\r$//" /entrypoint.sh'
                 - 'RUN chmod +x /entrypoint.sh'
                 - 'ENTRYPOINT ["/entrypoint.sh"]'
-                - 'CMD ["--config", "/data/config.yaml", "--port", "4000"]'
             containerHttpPort: 4000
     $$cap_appname-db:
         image: 'postgres:$$cap_postgres_version'
