@@ -1,6 +1,7 @@
 captainVersion: 4
 services:
     $$cap_appname:
+        image: flowiseai/flowise
         restart: unless-stopped
         environment:
             PORT: 3000
@@ -40,12 +41,6 @@ services:
             - $$cap_appname-data:/root/.flowise
         caproverExtra:
             containerHttpPort: 3000
-            dockerfileLines: |
-                - 'FROM flowiseai/flowise'
-                - 'RUN mkdir -p /root/.flowise /root/.flowise/logs /root/.flowise/storage /root/.flowise/api_key /root/.flowise/secret_key'
-                - 'RUN chmod -R 777 /root/.flowise'
-                - 'RUN chown -R 777 node:node /root/.flowise'
-                - 'EXEC sleep 3 && flowise'
         depends_on:
             - $$cap_appname-db
     $$cap_appname-db:
@@ -149,21 +144,16 @@ caproverOneClickApp:
           type: boolean
         - id: $$cap_model_list_config_json
           label: Model List Config JSON
-          defaultValue: null
           description: File path to load list of models from your local config file.
           type: text
         - id: $$cap_tool_function_builtin_dep
           label: Tool Function Built-in Dependencies
-          defaultValue: null
-          description: NodeJS built-in modules to be used for Tool Function.
-          type: text
-          example: fs, path
+          description: >-
+              NodeJS built-in modules to be used for Tool Function. Multiple modules should be comma-separated. (ie: crypto,fs,path)
         - id: $$cap_tool_function_external_dep
           label: Tool Function External Dependencies
-          defaultValue: null
-          description: External modules to be used for Tool Function.
-          type: text
-          example: axios, lodash
+          description: >-
+              External modules to be used for Tool Function. Multiple modules should be comma-separated. (ie: axios,express,fs-extra,moment)
         - id: $$cap_langchain_tracing_v2
           label: LangSmith Tracing
           defaultValue: false
@@ -203,6 +193,6 @@ caproverOneClickApp:
     displayName: Flowise AI (with Postgres) - LLM Orchestration Tool
     isOfficial: true
     description: >-
-        Flowise is an open-source low-code platform for building, deploying, and sharing customized LLM orchestration flows and AI agents, empowering developers to create AI solutions quickly and easily.
+        [24/04/26 9h15] Flowise is an open-source low-code platform for building, deploying, and sharing customized LLM flows and AI agents.
     documentation: >-
         Taken from https://docs.flowiseai.com | Official Website is https://flowiseai.com
