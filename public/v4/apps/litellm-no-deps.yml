@@ -19,6 +19,7 @@ services:
             GROQ_API_KEY: $$cap_groq_api_key
         volumes:
             - '$$cap_appname-data:/data'
+        # image: ghcr.io/berriai/litellm:main-latest - use the dockerfileLines instead
         caproverExtra:
             dockerfileLines:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
@@ -39,11 +40,6 @@ caproverOneClickApp:
         - id: $$cap_ui_password
           label: UI Password
           description: The password for accessing the LiteLLM web interface.
-          defaultValue: null
-        - id: $$cap_litellm_config
-          label: LiteLLM Config
-          description: The configuration file contents for LiteLLM.
-          type: text
           defaultValue: null
         - id: $$cap_openai_api_key
           label: OpenAI API Key
@@ -112,4 +108,4 @@ caproverOneClickApp:
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
     description: >-
-        [24/04/26 9h15] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
+        [24/04/26 9h35] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
