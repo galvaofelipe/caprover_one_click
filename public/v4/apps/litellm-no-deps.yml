@@ -25,7 +25,7 @@ services:
                 - 'FROM ghcr.io/berriai/litellm:main-latest'
                 - 'RUN mkdir -p /data'
                 - 'RUN chmod -R +wr /data'
-                - 'RUN test -f /data/config.yaml || echo -e "model_list:\n  - model_name: gpt-3.5-turbo ### RECEIVED MODEL NAME ###\n    litellm_params: # all params accepted by litellm.completion() - https://docs.litellm.ai/docs/completion/input\n      model: \"gpt-3.5-turbo\"\n      api_key: \$\$OPENAI_API_KEY" > /data/config.yaml'
+                - 'RUN test -f /data/config.yaml || echo -e "model_list:\n  - model_name: gpt-3.5-turbo ### RECEIVED MODEL NAME ###\n    litellm_params: # all params accepted by litellm.completion() - https://docs.litellm.ai/docs/completion/input\n      model: \"gpt-3.5-turbo\"\n      api_key: \$\$OPENAI_API_KEY\n    model_info: \n      mode: completion" > /data/config.yaml'
                 - 'CMD ["litellm", "--port", "4000", "--config", "/data/config.yaml"]'
             containerHttpPort: 4000
 caproverOneClickApp:
@@ -111,4 +111,4 @@ caproverOneClickApp:
     documentation: >-
         Taken from https://docs.litellm.ai/docs/ Official Website is https://litellm.ai/
     description: >-
-        [24/04/26 10h43] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
+        [24/04/26 11h] LiteLLM is a lightweight, scalable, and secure API proxy server for AI providers. This standalone version does not require any external database dependencies.
