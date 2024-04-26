@@ -196,4 +196,4 @@ caproverOneClickApp:
             See https://docs.litellm.ai/docs/ for more information.
     documentation: https://docs.litellm.ai/docs/
     description: |-
-        [2024/04/26 - 18h35] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
+        [2024/04/26 - 18h50] LiteLLM - API proxy server for AI providers. Standalone version, no database required unless using UI.
